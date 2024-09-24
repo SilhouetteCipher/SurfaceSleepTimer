@@ -4,9 +4,7 @@ import time
 import ctypes
 from pystray import MenuItem as item
 import pystray
-from PIL import Image, ImageDraw
-import os
-import tempfile
+from PIL import Image
 import sys
 
 class ModernLockTimerApp:
@@ -15,32 +13,13 @@ class ModernLockTimerApp:
         self.countdown_thread = None
         self.remaining_time = 0
 
-        # Create custom icon
-        self.icon_path = self.create_clock_icon()
+        # Load custom icon
+        icon_path = "timer.ico"
         menu = (item('Show', self.show_window), item('Exit', self.quit_app))
-        self.icon = pystray.Icon("lock_timer", Image.open(self.icon_path), "Lock Timer", menu)
+        self.icon = pystray.Icon("timer", Image.open(icon_path), "Lock Timer", menu)
         threading.Thread(target=self.icon.run, daemon=True).start()
 
         self.create_window()
-
-    def create_clock_icon(self, size=64, bg_color=(0, 150, 255), fg_color=(255, 255, 255)):
-        image = Image.new('RGBA', (size, size), color=bg_color+(255,))
-        draw = ImageDraw.Draw(image)
-        
-        # Draw clock circle
-        draw.ellipse([2, 2, size-2, size-2], outline=fg_color, width=2)
-        
-        # Draw clock hands
-        center = size // 2
-        draw.line([center, center, center, 10], fill=fg_color, width=2)  # Hour hand
-        draw.line([center, center, size-10, center], fill=fg_color, width=2)  # Minute hand
-        
-        # Save as .ico file
-        ico_output = tempfile.NamedTemporaryFile(suffix='.ico', delete=False)
-        image.save(ico_output, format='ICO', sizes=[(64, 64)])
-        ico_output.close()
-        
-        return ico_output.name
 
     def create_window(self):
         self.root = ctk.CTk()
@@ -64,11 +43,7 @@ class ModernLockTimerApp:
         self.root.protocol("WM_DELETE_WINDOW", self.hide_window)
         
         # Set the taskbar icon
-        if sys.platform.startswith('win'):
-            self.root.iconbitmap(default=self.icon_path)
-        else:
-            icon_image = Image.open(self.icon_path)
-            self.root.iconphoto(True, ctk.CTkImage(light_image=icon_image, dark_image=icon_image))
+        self.root.iconbitmap("timer.ico")
 
         ctk.set_appearance_mode("System")
         ctk.set_default_color_theme("blue")
@@ -135,7 +110,6 @@ class ModernLockTimerApp:
         self.is_running = False
         self.icon.stop()
         self.root.quit()
-        os.remove(self.icon_path)  # Clean up the temporary icon file
         sys.exit()
 
     def run(self):
