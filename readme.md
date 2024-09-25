@@ -1,6 +1,6 @@
 ## Perfect for Surface Tablets and YouTube Users
 
-This application is ideal for Surface tablet users who enjoy watching YouTube videos before sleep. The screensaver button enables a blank screen, which is particularly useful as Windows YouTube does not support audio playback while the device is locked. By using this timer, you ensure that your device locks when the timer ends, preventing unnecessary battery drain throughout the night.
+This application is ideal for Surface tablet users who enjoy watching YouTube videos before sleep. By using this timer, you ensure that your device locks when the timer ends, preventing unnecessary battery drain throughout the night after you have falled asleep. The screensaver button enables a blank screen, which is particularly useful as Windows YouTube does not support audio playback while the device is locked.
 
 ![Surface Sleep Timer Screenshot](/images/screenshot.png)
 
