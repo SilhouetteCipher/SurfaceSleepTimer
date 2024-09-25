@@ -2,6 +2,8 @@
 
 This application is ideal for Surface tablet users who enjoy watching YouTube videos before sleep. The screensaver button enables a blank screen, which is particularly useful as Windows YouTube does not support audio playback while the device is locked. By using this timer, you ensure that your device locks when the timer ends, preventing unnecessary battery drain throughout the night.
 
+![Surface Sleep Timer Screenshot](/images/screenshot.png)
+
 # Surface Sleep Timer
 
 This is a modern, customizable lock timer application built with Python and CustomTkinter. It allows users to set a timer for 30 minutes or 1 hour, after which it will lock the computer. It also includes a system tray icon for easy access and a screensaver activation feature.
