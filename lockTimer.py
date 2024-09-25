@@ -26,8 +26,8 @@ class ModernLockTimerApp:
         self.root.title("Lock Timer")
         
         # Set window size
-        window_width = 300
-        window_height = 450
+        window_width = 280
+        window_height = 370  # Further reduced height
         
         # Get screen width and height
         screen_width = self.root.winfo_screenwidth()
@@ -35,7 +35,7 @@ class ModernLockTimerApp:
         
         # Calculate position
         position_right = int(screen_width + window_width*2)
-        position_down = int(screen_height - window_height/2)
+        position_down = int(screen_height - window_height/3)
         
         # Set the geometry of the window
         self.root.geometry(f"{window_width}x{window_height}+{position_right}+{position_down}")
@@ -49,25 +49,39 @@ class ModernLockTimerApp:
         ctk.set_default_color_theme("blue")
 
         frame = ctk.CTkFrame(master=self.root)
-        frame.pack(pady=20, padx=20, fill="both", expand=True)
+        frame.pack(pady=10, padx=10, fill="both", expand=True)
 
         label = ctk.CTkLabel(master=frame, text="Choose a timer duration:", font=("Arial", 16))
-        label.pack(pady=20)
+        label.pack(pady=(0, 5))
 
-        button_style = {"font": ("Arial", 14), "width": 300, "height": 80}
+        button_style = {"font": ("Arial", 14), "width": 200, "height": 60}
 
         self.button_30min = ctk.CTkButton(master=frame, text="30 Minutes", command=lambda: self.start_timer(30), **button_style)
-        self.button_30min.pack(pady=10)
+        self.button_30min.pack(pady=5)
 
         self.button_1hour = ctk.CTkButton(master=frame, text="1 Hour", command=lambda: self.start_timer(60), **button_style)
-        self.button_1hour.pack(pady=10)
+        self.button_1hour.pack(pady=5)
 
         self.timer_label = ctk.CTkLabel(master=frame, text="", font=("Arial", 16))
-        self.timer_label.pack(pady=20)
+        self.timer_label.pack(pady=5)
 
-        # Add exit button with matching style
-        exit_button = ctk.CTkButton(master=frame, text="Exit", command=self.quit_app, **button_style)
-        exit_button.pack(pady=10)
+        # Add screensaver button
+        screensaver_button = ctk.CTkButton(master=frame, text="Start Screensaver", command=self.start_screensaver, **button_style)
+        screensaver_button.pack(pady=5)
+
+        # Create a frame for the bottom row buttons
+        bottom_frame = ctk.CTkFrame(master=frame)
+        bottom_frame.pack(pady=5)
+
+        # Create a new style for bottom row buttons
+        bottom_button_style = {"font": ("Arial", 14), "width": 97, "height": 60}
+
+        # Add minimize and exit buttons inside the bottom frame
+        minimize_button = ctk.CTkButton(master=bottom_frame, text="Minimize", command=self.hide_window, **bottom_button_style)
+        minimize_button.pack(side="left", padx=(0, 3))
+
+        exit_button = ctk.CTkButton(master=bottom_frame, text="Exit", command=self.quit_app, **bottom_button_style)
+        exit_button.pack(side="left", padx=(3, 0))
 
     def start_timer(self, minutes):
         self.button_30min.configure(state="disabled")
@@ -94,6 +108,12 @@ class ModernLockTimerApp:
             ctypes.windll.user32.LockWorkStation()
         except:
             self.timer_label.configure(text="Failed to lock. Please lock manually.")
+
+    def start_screensaver(self):
+        try:
+            ctypes.windll.user32.SendMessageW(0xFFFF, 0x112, 0xF140, 0)
+        except:
+            self.timer_label.configure(text="Failed to start screensaver. Please start manually.")
 
     def show_window(self):
         self.root.after(0, self._show_window)
