@@ -7,7 +7,7 @@ import pystray
 from PIL import Image
 import sys
 
-class ModernLockTimerApp:
+class ModernSleepTimerApp:
     def __init__(self):
         self.is_running = True
         self.countdown_thread = None
@@ -16,18 +16,18 @@ class ModernLockTimerApp:
         # Load custom icon
         icon_path = "timer.ico"
         menu = (item('Show', self.show_window), item('Exit', self.quit_app))
-        self.icon = pystray.Icon("timer", Image.open(icon_path), "Lock Timer", menu)
+        self.icon = pystray.Icon("timer", Image.open(icon_path), "Sleep Timer", menu)
         threading.Thread(target=self.icon.run, daemon=True).start()
 
         self.create_window()
 
     def create_window(self):
         self.root = ctk.CTk()
-        self.root.title("Lock Timer")
+        self.root.title("Sleep Timer")
         
         # Set window size
         window_width = 280
-        window_height = 370  # Further reduced height
+        window_height = 370
         
         # Get screen width and height
         screen_width = self.root.winfo_screenwidth()
@@ -101,13 +101,13 @@ class ModernLockTimerApp:
             self.remaining_time -= 1
 
         if self.is_running:
-            self.lock_pc()
+            self.sleep_pc()
 
-    def lock_pc(self):
+    def sleep_pc(self):
         try:
-            ctypes.windll.user32.LockWorkStation()
+            ctypes.windll.PowrProf.SetSuspendState(0, 1, 0)
         except:
-            self.timer_label.configure(text="Failed to lock. Please lock manually.")
+            self.timer_label.configure(text="Failed to sleep. Please sleep manually.")
 
     def start_screensaver(self):
         try:
@@ -136,5 +136,5 @@ class ModernLockTimerApp:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    app = ModernLockTimerApp()
+    app = ModernSleepTimerApp()
     app.run()
